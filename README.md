@@ -22,6 +22,23 @@ AIを使って1週間分の献立（朝/昼/夜）を自動生成する Next.js 
    OPENAI_API_KEY=あなたのAPIキー
    ```
 
+### デフォルト値の設定（人数・予算・アレルギー/除外食材・苦手/好み・1食の目安時間）
+- UI の初期表示や未入力時に使うデフォルト値は環境変数で指定できます。
+- テンプレート: `.env.example` を参照し、実際に使う値は `.env.local` に記述してください（`.gitignore` 済み）。
+
+```env
+# 人数（正の整数、例: 2）
+NEXT_PUBLIC_DEFAULT_SERVINGS=2
+# 1日の予算（例: 1500円 / 空なら未設定）
+NEXT_PUBLIC_DEFAULT_BUDGET=1500円
+# アレルギー/除外食材（例: 卵, 乳）
+NEXT_PUBLIC_DEFAULT_ALLERGIES=卵, 乳
+# 苦手な料理/好み（例: 辛いものを避ける、魚多め）
+NEXT_PUBLIC_DEFAULT_DISLIKES=辛いものを避ける
+# 1食の目安時間（例: 20分）
+NEXT_PUBLIC_DEFAULT_TIME_PER_MEAL=20分
+```
+
 ## 起動
 - 開発サーバー
   ```bash
@@ -78,6 +95,7 @@ app/
 
 ## 環境・注意
 - `OPENAI_API_KEY` は `.env.local` などに保存し、リポジトリへコミットしないでください。
+- `NEXT_PUBLIC_` で始まる変数はクライアントに公開されるため秘密情報を入れないでください。
 - 外部APIに依存するため、ネットワーク環境とAPIキーの権限/残高に注意してください。
 
 ## ライセンス

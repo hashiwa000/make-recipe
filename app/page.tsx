@@ -2,6 +2,14 @@
 
 import { useState } from "react";
 
+// 環境変数からデフォルト値を読込（ビルド時に置換）
+const ENV_SERVINGS = Number(process.env.NEXT_PUBLIC_DEFAULT_SERVINGS);
+const DEFAULT_SERVINGS = Number.isFinite(ENV_SERVINGS) && ENV_SERVINGS > 0 ? ENV_SERVINGS : 2;
+const DEFAULT_BUDGET = process.env.NEXT_PUBLIC_DEFAULT_BUDGET ?? "";
+const DEFAULT_ALLERGIES = process.env.NEXT_PUBLIC_DEFAULT_ALLERGIES ?? "";
+const DEFAULT_DISLIKES = process.env.NEXT_PUBLIC_DEFAULT_DISLIKES ?? "";
+const DEFAULT_TIME_PER_MEAL = process.env.NEXT_PUBLIC_DEFAULT_TIME_PER_MEAL ?? "";
+
 type Preferences = {
   allergies?: string;
   dislikes?: string;
@@ -24,7 +32,13 @@ type MealPlan = {
 };
 
 export default function Page() {
-  const [prefs, setPrefs] = useState<Preferences>({ servings: 2 });
+  const [prefs, setPrefs] = useState<Preferences>({
+    servings: DEFAULT_SERVINGS,
+    budget: DEFAULT_BUDGET,
+    allergies: DEFAULT_ALLERGIES,
+    dislikes: DEFAULT_DISLIKES,
+    timePerMeal: DEFAULT_TIME_PER_MEAL,
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [plan, setPlan] = useState<MealPlan | null>(null);
@@ -58,7 +72,7 @@ export default function Page() {
           <input
             type="text"
             placeholder="例: 卵, 乳, そば"
-            value={prefs.allergies ?? ""}
+            value={prefs.allergies ?? DEFAULT_ALLERGIES}
             onChange={(e) => setPrefs({ ...prefs, allergies: e.target.value })}
             style={{ width: '100%', padding: 8 }}
           />
@@ -68,7 +82,7 @@ export default function Page() {
           <input
             type="text"
             placeholder="例: 辛いものを避ける、魚多め"
-            value={prefs.dislikes ?? ""}
+            value={prefs.dislikes ?? DEFAULT_DISLIKES}
             onChange={(e) => setPrefs({ ...prefs, dislikes: e.target.value })}
             style={{ width: '100%', padding: 8 }}
           />
@@ -79,7 +93,7 @@ export default function Page() {
             <input
               type="text"
               placeholder="例: 20分"
-              value={prefs.timePerMeal ?? ""}
+              value={prefs.timePerMeal ?? DEFAULT_TIME_PER_MEAL}
               onChange={(e) => setPrefs({ ...prefs, timePerMeal: e.target.value })}
               style={{ width: '100%', padding: 8 }}
             />
@@ -89,7 +103,7 @@ export default function Page() {
             <input
               type="text"
               placeholder="例: 1500円"
-              value={prefs.budget ?? ""}
+              value={prefs.budget ?? DEFAULT_BUDGET}
               onChange={(e) => setPrefs({ ...prefs, budget: e.target.value })}
               style={{ width: '100%', padding: 8 }}
             />
@@ -100,7 +114,7 @@ export default function Page() {
           <input
             type="number"
             min={1}
-            value={prefs.servings ?? 2}
+            value={prefs.servings ?? DEFAULT_SERVINGS}
             onChange={(e) => setPrefs({ ...prefs, servings: Number(e.target.value) })}
             style={{ width: 120, padding: 8 }}
           />
@@ -144,4 +158,3 @@ export default function Page() {
     </div>
   );
 }
-
